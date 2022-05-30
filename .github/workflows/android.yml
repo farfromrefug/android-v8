@@ -19,7 +19,7 @@ jobs:
       matrix:
         arch: ['arm' ,'arm64' ,'x86' ,'x64']
         # arch: ['arm']
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     name: ${{ matrix.arch }}
     env:
       DEBIAN_FRONTEND: noninteractive
