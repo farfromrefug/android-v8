@@ -27,7 +27,7 @@ jobs:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       USE_CCACHE: 1
     container:
-      image: kudo/ubuntu-nonroot:20.04
+      image: kudo/ubuntu-nonroot:18.04
     steps:
       - name: Setup docker workspace
         run: |
@@ -74,7 +74,7 @@ jobs:
 
   # Combine the various architecture builds with the headers and a custom libv8.json file
   package:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     name: Package
     needs: build
     steps:
