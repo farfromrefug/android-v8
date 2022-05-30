@@ -41,9 +41,10 @@ cd ${V8_DIR}
 for CURRENT_ARCH in ${ARCH_ARR[@]}
 do
         if [[ $BUILD_TYPE == "debug" ]] ;then
-                gn gen $BUILD_DIR_PREFIX/$CURRENT_ARCH-$BUILD_TYPE --args="is_component_build=true v8_use_external_startup_data=true is_debug=true symbol_level=2 target_cpu=\"$CURRENT_ARCH\" v8_target_cpu=\"$CURRENT_ARCH\" v8_enable_i18n_support=false target_os=\"android\" v8_android_log_stdout=false"
+                ARGS="is_component_build=true v8_use_external_startup_data=true is_debug=true symbol_level=2 target_cpu=\"$CURRENT_ARCH\" v8_target_cpu=\"$CURRENT_ARCH\" v8_enable_i18n_support=false target_os=\"android\" v8_android_log_stdout=false"
+                gn gen $BUILD_DIR_PREFIX/$CURRENT_ARCH-$BUILD_TYPE --args="$ARGS android32_ndk_api_level=$NDK_API_LEVEL android_ndk_major_version=$NDK_MAJOR_VERSION android_sdk_platform_version=$ANDROID_SDK_PLATFORM_VERSION android_sdk_build_tools_version=\"$ANDROID_SDK_BUILD_TOOLS_VERSION\"  android_sdk_version=$ANDROID_SDK_PLATFORM_VERSION android64_ndk_api_level=$NDK_64_API_LEVEL"
         else
-                ARGS="use_goma=false is_clang=true enable_resource_allowlist_generation=false is_component_build=true v8_use_external_startup_data=false is_official_build=true use_thin_lto=false is_debug=false symbol_level=0 target_cpu=\"$CURRENT_ARCH\" v8_target_cpu=\"$CURRENT_ARCH\" v8_enable_i18n_support=false target_os=\"android\" v8_android_log_stdout=false use_custom_libcxx=true cc_wrapper=\"ccache\""
+                ARGS="is_component_build=true v8_use_external_startup_data=true is_official_build=true use_thin_lto=false is_debug=false symbol_level=0 target_cpu=\"$CURRENT_ARCH\" v8_target_cpu=\"$CURRENT_ARCH\" v8_enable_i18n_support=false target_os=\"android\" v8_android_log_stdout=false"
                 gn gen $BUILD_DIR_PREFIX/$CURRENT_ARCH-$BUILD_TYPE --args="$ARGS android32_ndk_api_level=$NDK_API_LEVEL android_ndk_major_version=$NDK_MAJOR_VERSION android_sdk_platform_version=$ANDROID_SDK_PLATFORM_VERSION android_sdk_build_tools_version=\"$ANDROID_SDK_BUILD_TOOLS_VERSION\"  android_sdk_version=$ANDROID_SDK_PLATFORM_VERSION android64_ndk_api_level=$NDK_64_API_LEVEL"
 
         fi
@@ -54,7 +55,7 @@ for CURRENT_ARCH in ${ARCH_ARR[@]}
 do
 
         # make fat build
-        V8_FOLDERS=(v8_compiler v8_base_without_compiler v8_libplatform v8_snapshot v8_libbase v8_bigint torque_generated_initializers torque_generated_definitions)
+        V8_FOLDERS=(v8_compiler v8_base_without_compiler v8_libplatform v8_libbase v8_libsampler v8_snapshot v8_initializers v8_init torque_generated_initializers)
         export CCACHE_CPP2=yes
 	export CCACHE_SLOPPINESS=time_macros
 	export PATH=$V8_DIR/third_party/llvm-build/Release+Asserts/bin:$PATH
