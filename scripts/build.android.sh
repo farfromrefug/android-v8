@@ -3,10 +3,14 @@
 source $(dirname $0)/env.sh
 
 ARCH_ARR=(arm arm64 x86 x64)
-while getopts 'l:' opt; do
+BUILD_TYPE="release"
+while getopts 'l:b:' opt; do
   case ${opt} in
     l)
         ARCH_ARR=($OPTARG)
+      ;;
+    b)
+        BUILD_TYPE=($OPTARG)
       ;;
   esac
 done
@@ -31,12 +35,8 @@ fi
 
 BUILD_DIR_PREFIX="outgn"
 
-BUILD_TYPE="release"
 
 cd ${V8_DIR}
-if [[ $1 == "debug" ]] ;then
-        BUILD_TYPE="debug"
-fi
 # generate project in release mode
 for CURRENT_ARCH in ${ARCH_ARR[@]}
 do

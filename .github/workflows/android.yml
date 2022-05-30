@@ -1,6 +1,16 @@
 name: Build for Android
 
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      buildtype:
+        type: choice
+        description: Build type
+        required: true
+        default: 'release' 
+        options: 
+        - release
+        - debug
 
 jobs:
   build:
@@ -51,7 +61,7 @@ jobs:
             ${{ runner.os }}-ccache-
 
       - name: Build
-        run: ./scripts/build.android.sh -l ${{ matrix.arch }}
+        run: ./scripts/build.android.sh -l ${{ matrix.arch }} -b ${{ github.event.inputs.buildtype }}
 
       - name: Show summary of ccache configuration and statistics counters
         run: ccache --show-stats
@@ -59,8 +69,8 @@ jobs:
       - name: Archive Build
         uses: actions/upload-artifact@v2
         with:
-          name: libv8-release-${{ matrix.arch }}
-          path: dist/${{ matrix.arch }}-release
+          name: libv8-${{ github.event.inputs.buildtype }} -${{ matrix.arch }}
+          path: dist/${{ matrix.arch }}-${{ github.event.inputs.buildtype }}
 
   # Combine the various architecture builds with the headers and a custom libv8.json file
   package:
