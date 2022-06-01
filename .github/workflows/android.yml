@@ -103,7 +103,7 @@ jobs:
           ./scripts/setup-build.sh
 
       - name: Create directories
-        run: mkdir -p 'build/release/libs' 2>/dev/null
+        run: mkdir -p 'build/${{ github.event.inputs.buildtype }}/libs' 2>/dev/null
 
       - name: Create libv8.json
         run: |
