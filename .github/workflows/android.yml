@@ -120,33 +120,33 @@ jobs:
             \"ndkVersion\": \"$ndkVersion\",
             \"ndkApiLevel\": \"$NDK_API_LEVEL\",
             \"ndk64ApiLevel\": \"$NDK_64_API_LEVEL\"
-          }" >> build/release/libv8.json
+          }" >> build/${{ github.event.inputs.buildtype }}/libv8.json
 
       - name: Download all workflow run artifsacts
         uses: actions/download-artifact@v2
 
       - name: Move built libraries to final folder
         run: |
-          mv libv8-release-arm/generated build/release/generated
-          mv libv8-release-arm/include build/release/include
-          mv libv8-release-arm/v8_inspector build/release/v8_inspector
-          mkdir build/release/libs/arm && mv libv8-release-arm/*.a build/release/libs/armeabi-v7a
-          mkdir build/release/libs/arm64-v8a && mv libv8-release-arm64/*.a build/release/libs/arm64-v8a
-          mkdir build/release/libs/x86 && mv libv8-release-x86/*.a build/release/libs/x86
-          mkdir build/release/libs/x86_64 && mv libv8-release-x64/*.a build/release/libs/x86_64
+          mv libv8-${{ github.event.inputs.buildtype }}-arm/generated build/${{ github.event.inputs.buildtype }}/generated
+          mv libv8-${{ github.event.inputs.buildtype }}-arm/include build/${{ github.event.inputs.buildtype }}/include
+          mv libv8-${{ github.event.inputs.buildtype }}-arm/v8_inspector build/${{ github.event.inputs.buildtype }}/v8_inspector
+          mkdir build/${{ github.event.inputs.buildtype }}/libs/arm && mv libv8-${{ github.event.inputs.buildtype }}-arm/*.a build/${{ github.event.inputs.buildtype }}/libs/armeabi-v7a
+          mkdir build/${{ github.event.inputs.buildtype }}/libs/arm64-v8a && mv libv8-${{ github.event.inputs.buildtype }}-arm64/*.a build/${{ github.event.inputs.buildtype }}/libs/arm64-v8a
+          mkdir build/${{ github.event.inputs.buildtype }}/libs/x86 && mv libv8-${{ github.event.inputs.buildtype }}-x86/*.a build/${{ github.event.inputs.buildtype }}/libs/x86
+          mkdir build/${{ github.event.inputs.buildtype }}/libs/x86_64 && mv libv8-${{ github.event.inputs.buildtype }}-x64/*.a build/${{ github.event.inputs.buildtype }}/libs/x86_64
             
       - name: Archive Build
         uses: actions/upload-artifact@v2
         with:
-          name: libv8-android-${{ env.v8Version }}-release
+          name: libv8-android-${{ env.v8Version }}-${{ github.event.inputs.buildtype }}
           path: |
-            build/release
+            build/${{ github.event.inputs.buildtype }}
           
       - name: Delete uneeded artifacts
         uses: geekyeggo/delete-artifact@v1
         with:
           name: |
-            libv8-release-arm
-            libv8-release-arm64
-            libv8-release-x86
-            libv8-release-x64
+            libv8-${{ github.event.inputs.buildtype }}-arm
+            libv8-${{ github.event.inputs.buildtype }}-arm64
+            libv8-${{ github.event.inputs.buildtype }}-x86
+            libv8-${{ github.event.inputs.buildtype }}-x64
