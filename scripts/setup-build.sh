@@ -87,7 +87,7 @@ if [[ ${PLATFORM} = "android" ]]; then
 
   # Apply N Patches
   patch -d "${V8_DIR}" -p1 < "${PATCHES_DIR}/android/main.patch"
-  # patch -d "${V8_DIR}" -p1 < "${PATCHES_DIR}/android/main.patch"
+  patch -d "${V8_DIR}/build" -p1 < "${PATCHES_DIR}/android/build.patch"
 
   installNDK
   exit 0
