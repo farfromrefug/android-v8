@@ -1,4 +1,20 @@
-#!/bin/bash -e
+#!/bin/bash 
+set -x
+
+case $(uname | tr '[:upper:]' '[:lower:]') in
+  linux*)
+    export OS_NAME=linux
+    ;;
+  darwin*)
+    export OS_NAME=darwin
+    ;;
+  msys*)
+    export OS_NAME=windows
+    ;;
+  *)
+    export OS_NAME=notset
+    ;;
+esac
 
 GCLIENT_SYNC_ARGS="--reset --with_branch_head"
 while getopts 'r:s' opt; do
@@ -38,9 +54,12 @@ function verify_platform()
 function installNDK() {
   pushd .
   cd "${V8_DIR}"
-  wget -q https://dl.google.com/android/repository/android-ndk-${NDK_VERSION}-linux-x86_64.zip
-  unzip -q android-ndk-${NDK_VERSION}-linux-x86_64.zip
-  rm -f android-ndk-${NDK_VERSION}-linux-x86_64.zip
+  if [[ ! -d " android-ndk-${NDK_VERSION}" ]]; then
+    FILENAME="android-ndk-${NDK_VERSION}-${OS_NAME}-x86_64.zip"
+    wget -q https://dl.google.com/android/repository/${FILENAME}
+    unzip -q ${FILENAME}
+    rm -f${FILENAME}
+  fi
   popd
   ls -d ${V8_DIR}
 }
