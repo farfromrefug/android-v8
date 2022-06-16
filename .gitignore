@@ -3,3 +3,5 @@
 .cipd
 .gclient
 .gclient_entries
+dist
+a.out
