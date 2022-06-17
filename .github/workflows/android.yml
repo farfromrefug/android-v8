@@ -61,7 +61,7 @@ jobs:
             ${{ runner.os }}-ccache-
 
       - name: Build
-        run: ./scripts/build.android.sh -l ${{ matrix.arch }}
+        run: ./scripts/build.android.sh -l ${{ matrix.arch }} ${{ github.event.inputs.buildtype }}
 
       - name: Show summary of ccache configuration and statistics counters
         run: ccache --show-stats
