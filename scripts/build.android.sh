@@ -1,4 +1,5 @@
 #!/bin/bash -e
+set -x #echo on
 
 source $(dirname $0)/env.sh
 
@@ -89,6 +90,9 @@ do
         echo "CURRENT_DIST_DIR $CURRENT_DIST_DIR"
         echo "CURRENT_DIST_DIR_INCLUDES $CURRENT_DIST_DIR_INCLUDES"
 
+        echo "v8 obj folder listing:"
+        ls -la  "${OUTFOLDER}/obj"
+
         mkdir -p $CURRENT_DIST_DIR
 
 
@@ -104,7 +108,7 @@ do
         LAST_PARAM="${LAST_PARAM} $OUTFOLDER/obj/third_party/zlib/zlib/*.o ${OUTFOLDER}/obj/third_party/zlib/zlib/*.o ${OUTFOLDER}/obj/third_party/zlib/zlib_adler32_simd/*.o ${OUTFOLDER}/obj/third_party/zlib/google/compression_utils_portable/*.o ${OUTFOLDER}/obj/third_party/zlib/zlib_inflate_chunk_simd/*.o"
 
         LAST_PARAM="${LAST_PARAM} ${OUTFOLDER}/obj/third_party/android_ndk/cpu_features/*.o"
-        LAST_PARAM="${LAST_PARAM} ${OUTFOLDER}/obj/cppgc_base/*.o ${OUTFOLDER}/obj/v8_cppgc_shared/*.o"
+        # LAST_PARAM="${LAST_PARAM} ${OUTFOLDER}/obj/cppgc_base/*.o ${OUTFOLDER}/obj/v8_cppgc_shared/*.o"
         
         if [[ $CURRENT_ARCH = "arm" || $CURRENT_ARCH = "arm64" ]]; then
                 LAST_PARAM="${LAST_PARAM} ${OUTFOLDER}/obj/third_party/zlib/zlib_arm_crc32/*.o"
