@@ -1,16 +1,16 @@
 name: Build for Android
 
-on:
+on: 
   workflow_dispatch:
     inputs:
       buildtype:
         type: choice
-        description: Build type
+        description: build type
         required: true
-        default: 'release' 
-        options: 
-        - release
-        - debug
+        default: 'release'
+        options:
+          - release
+          - debug
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
       matrix:
         arch: ['arm' ,'arm64' ,'x86' ,'x64']
         # arch: ['arm']
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     name: ${{ matrix.arch }}
     env:
       DEBIAN_FRONTEND: noninteractive
@@ -27,7 +27,7 @@ jobs:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       USE_CCACHE: 1
     container:
-      image: kudo/ubuntu-nonroot:18.04
+      image: kudo/ubuntu-nonroot:20.04
     steps:
       - name: Setup docker workspace
         run: |
@@ -61,7 +61,7 @@ jobs:
             ${{ runner.os }}-ccache-
 
       - name: Build
-        run: ./scripts/build.android.sh -l ${{ matrix.arch }} -b ${{ github.event.inputs.buildtype }}
+        run: ./scripts/build.android.sh -l ${{ matrix.arch }} ${{ github.event.inputs.buildtype }}
 
       - name: Show summary of ccache configuration and statistics counters
         run: ccache --show-stats
@@ -69,12 +69,12 @@ jobs:
       - name: Archive Build
         uses: actions/upload-artifact@v2
         with:
-          name: libv8-${{ github.event.inputs.buildtype }} -${{ matrix.arch }}
-          path: dist/${{ matrix.arch }}-${{ github.event.inputs.buildtype }}
+          name: libv8-${{ github.event.inputs.buildtype }}-${{ matrix.arch }}
+          path: dist/${{ github.event.inputs.buildtype }}
 
   # Combine the various architecture builds with the headers and a custom libv8.json file
   package:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     name: Package
     needs: build
     steps:
@@ -140,10 +140,10 @@ jobs:
           mv libv8-${{ github.event.inputs.buildtype }}-arm/generated build/${{ github.event.inputs.buildtype }}/generated
           mv libv8-${{ github.event.inputs.buildtype }}-arm/include build/${{ github.event.inputs.buildtype }}/include
           mv libv8-${{ github.event.inputs.buildtype }}-arm/v8_inspector build/${{ github.event.inputs.buildtype }}/v8_inspector
-          mkdir build/${{ github.event.inputs.buildtype }}/libs/arm && mv libv8-${{ github.event.inputs.buildtype }}-arm/*.a build/${{ github.event.inputs.buildtype }}/libs/armeabi-v7a
-          mkdir build/${{ github.event.inputs.buildtype }}/libs/arm64-v8a && mv libv8-${{ github.event.inputs.buildtype }}-arm64/*.a build/${{ github.event.inputs.buildtype }}/libs/arm64-v8a
-          mkdir build/${{ github.event.inputs.buildtype }}/libs/x86 && mv libv8-${{ github.event.inputs.buildtype }}-x86/*.a build/${{ github.event.inputs.buildtype }}/libs/x86
-          mkdir build/${{ github.event.inputs.buildtype }}/libs/x86_64 && mv libv8-${{ github.event.inputs.buildtype }}-x64/*.a build/${{ github.event.inputs.buildtype }}/libs/x86_64
+          mv libv8-${{ github.event.inputs.buildtype }}-arm/armeabi-v7a build/${{ github.event.inputs.buildtype }}/libs
+          mv libv8-${{ github.event.inputs.buildtype }}-arm64/arm64-v8a build/${{ github.event.inputs.buildtype }}/libs
+          mv libv8-${{ github.event.inputs.buildtype }}-x86/x86 build/${{ github.event.inputs.buildtype }}/libs
+          mv libv8-${{ github.event.inputs.buildtype }}-x64/x86_64 build/${{ github.event.inputs.buildtype }}/libs
             
       - name: Archive Build
         uses: actions/upload-artifact@v2
