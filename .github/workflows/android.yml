@@ -140,7 +140,7 @@ jobs:
           mv libv8-${{ github.event.inputs.buildtype }}-arm/generated build/${{ github.event.inputs.buildtype }}/generated
           mv libv8-${{ github.event.inputs.buildtype }}-arm/include build/${{ github.event.inputs.buildtype }}/include
           mv libv8-${{ github.event.inputs.buildtype }}-arm/v8_inspector build/${{ github.event.inputs.buildtype }}/v8_inspector
-          libv8-${{ github.event.inputs.buildtype }}-arm/armeabi-v7a build/${{ github.event.inputs.buildtype }}/libs
+          mv libv8-${{ github.event.inputs.buildtype }}-arm/armeabi-v7a build/${{ github.event.inputs.buildtype }}/libs
           mv libv8-${{ github.event.inputs.buildtype }}-arm64/arm64-v8a build/${{ github.event.inputs.buildtype }}/libs
           mv libv8-${{ github.event.inputs.buildtype }}-x86/x86 build/${{ github.event.inputs.buildtype }}/libs
           mv libv8-${{ github.event.inputs.buildtype }}-x64/x86_64 build/${{ github.event.inputs.buildtype }}/libs
